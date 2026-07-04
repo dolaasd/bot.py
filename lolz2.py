@@ -1095,8 +1095,8 @@ async def process_confirm_payment(callback_query: types.CallbackQuery):
     
     seller_info = await bot.get_chat(deal['seller_id'])
     buyer_info = await bot.get_chat(user_id)
-    await send_log_to_admins(f"💰 ПОДТВЕРЖДЕНИЕ ОПЛАТЫ\n\n🆔 {deal_id}\n👤 Продавец: @{seller_info.username if seller_info.username else f'ID: {deal[\'seller_id\']}'}}\n👤 Покупатель: @{buyer_info.username if buyer_info.username else f'ID: {user_id}'}\n💰 {deal[\'amount\']} {deal[\'currency_display\']}\n💳 {deal[\'payment_type\']}\n📦 {deal[\'offer\']}\n💵 Остаток: {user_balances[user_id]} ₽\n🕐 {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
-
+    await send_log_to_admins(
+        f"💰 ПОДТВЕРЖДЕНИЕ ОПЛАТЫ\n\n🆔 {deal_id}\n👤 Продавец: @{seller_info.username or f'ID: f"id: {deal['seller_id']}'}\n👤 Покупатель: @{buyer_info.username or f'ID: {user_id}'}\n💰 {deal['amount']} {deal['currency_display']}\n💳 {deal['payment_type']}\n📦 {deal['offer']}\n💵 Остаток: {user_balances[user_id]} ₽\n🕐 {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
         await send_photo_with_text(deal['seller_id'], f"✅ Покупатель подтвердил оплату!\n\n🆔 {deal_id}\n💰 {deal['amount']} {deal['currency_display']}\n📦 {deal['offer']}\n\n✅ Средства списаны с баланса.\n❗️ Товар передавать на @ManagerLolzDeaIs", get_seller_delivery_keyboard(deal_id))
         await callback_query.message.answer(f"✅ Продавец уведомлен.\n\n💰 Баланс: {user_balances[user_id]} ₽")
         await callback_query.message.edit_reply_markup(reply_markup=None)
